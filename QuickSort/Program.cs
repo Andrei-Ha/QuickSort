@@ -4,11 +4,12 @@ namespace QuickSort
 {
     class Program
     {
-        private static int[] array = new int[] { 5, 9, 3, 7, 6, 1, 2, 4, 8, 0 };
+        private static int[] array = new int[] { 9, 5, 9, 9, 3, 7, 6, 5, 1, 2, 4, 8, 0, 10, 11, 12 };
         static void Main(string[] args)
         {
             FPrint();
             FQuickSort();
+            FPrint();
             Console.ReadKey();
         }
         public static void FQuickSort()
@@ -17,47 +18,37 @@ namespace QuickSort
         }
         public static void FSort(int left, int right)
         {
-            int pivot;
-            if (left != right)
+            if (left < right)
             {
-                pivot = left + (right - left) / 2;
-                    Console.WriteLine($"Pivot = {pivot}. for l = {left} and r = {right}. Val = {array[pivot]}" );
-                    Console.WriteLine("FSwap begining...");
-                    Console.WriteLine();
-                int newEdge = FSwapAndGetNewEdge(left, right, array[pivot]);
+                int newEdge = FSwapAndGetNewEdge(left, right);
                     Console.WriteLine("new edges: " + newEdge);
-                FSort(left, newEdge);
+                FSort(left, --newEdge);
                 FSort(++newEdge, right);
             }
         }
-        public static int FSwapAndGetNewEdge(int l, int r, int val)
+        public static int FSwapAndGetNewEdge(int l, int r)
         {
-            if (l >= r)
+            Console.WriteLine($"l = {l}, r = {r}");
+            int edge = l - 1;
+            for(int i = l; i < r; i++)
             {
-                return l;
-            }
-            while ((l < r) && (array[l] < val || array[r] > val ))
-            {
-                if (array[r] > val)
+                if (array[i] <= array[r])
                 {
-                    r--;
+                    edge++;
+                    Swap(i, edge);
                 }
-                if (array[l] <= val && r > l)
-                {
-                    l++;
-                }
-                    Console.WriteLine("one pass completed");
             }
-                Console.WriteLine($"change indexes {l} and {r}. Values {array[l]} and { array[r]}");
-            if (l != r)
-            {
-                int temp = array[l];
-                array[l] = array[r];
-                array[r] = temp;
-            }
-                Console.WriteLine("array after swap:");
-            FPrint();
-            return FSwapAndGetNewEdge(l, r, val);
+
+            edge++;
+            Swap(edge, r);
+            return edge;
+
+        }
+        private static void Swap(int a, int b)
+        {
+            int temp = array[a];
+            array[a] = array[b];
+            array[b] = temp;
         }
         public static void FPrint()
         {
